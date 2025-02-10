@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="username" placeholder="username:">
+    <input type="password" id="password" placeholder="password">
+    <input type="text" id="email" placeholder="email">
+    <input type="text" id="firstName" placeholder="nome">
+    <input type="text" id="lastName" placeholder="cognome">
+    <input type="date" id="dataNascita">
+    <select id="sesso">
+        <option value="M" selected>M</option>
+        <option value="F">F</option>
+        <option value="A">Altro</option>
+    </select>
+    <button onclick="submit()">Invia</button>
+    <a href="index.html">Home</a>
+    <a href="register.html">Registrati</a>
+    <a href="modifica.html">Modifica</a>
+    <button onclick="logout()">Logout</a>
+</body>
+<script>
+    async function logout() {
+        localStorage.removeItem('username');
+        localStorage.removeItem('email');
+        window.location.reload();
+    }
+    async function submit() {
+        const username = document.getElementById("username")
+        const password = document.getElementById("password")
+        const email = document.getElementById("email")
+        const dataNascita = document.getElementById("dataNascita")
+        const sesso = document.getElementById("sesso")
+        const firstName = document.getElementById("firstName")
+        const lastName = document.getElementById("lastName")
+        fetch("http://localhost:3000/registerUsers", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email.value,
+                password: password.value,
+                username: username.value,
+                dataNascita:dataNascita.value,
+                sesso:sesso.value,
+                firstName:firstName.value,
+                lastName:lastName.value
+            })
+        })
+    }
+</script>
+</html>

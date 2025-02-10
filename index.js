@@ -29,7 +29,7 @@ const authenticateToken = (req, res, next) => {
 
 app.post('/exportConfiguration',authenticateToken ,(req, res) => {
     //TODO:Manda anche gli altri campi tipo option e ps 
-    //FIXME:Implementa i buttonL1, buttonR1, buttonL2, buttonR2, triggerL2, triggerR2...
+    //TODO:Implementa i buttonL1, buttonR1, buttonL2, buttonR2, triggerL2, triggerR2...
     const {
         buttonCross,
         buttonCircle,
@@ -64,11 +64,7 @@ app.post('/exportConfiguration',authenticateToken ,(req, res) => {
         // triggerL2,
         // triggerR2,
     };
-
-
     console.log("Dati ricevuti:", data);
-
-    // Scrivi i dati su un file di testo
     const filePath = `./${username}_config.txt`;
     const fileContent = JSON.stringify(data, null, 2);
     fs.writeFile(filePath, fileContent, (err) => {
@@ -127,7 +123,7 @@ function testRegex(email) {
     const domainRegex = /@(studenti\.uniba\.it|uniba\.it|gmail\.com|yahoo\.com|icloud\.com)$/;
     return domainRegex.test(email);
 }
-app.post('/registerAdmin',authenticateToken, (req, res) => {
+app.post('/registerAdmin', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const username = req.body.username;
@@ -144,7 +140,7 @@ app.post('/registerAdmin',authenticateToken, (req, res) => {
     )
 });
 
-app.post('/loginAdmin',authenticateToken, (req, res) => {
+app.post('/loginAdmin', (req, res) => {
     const usmail = req.body.usmail;
     const password = req.body.password;
     const isEmail = domainRegex.test(usmail);
@@ -287,7 +283,6 @@ app.put('/modifyUser',authenticateToken, async (req, res) => {
             }
         });
     } else if (password) {
-        // Hasha la password prima di salvarla nel database
         const hashedPassword = await bcrypt.hash(password, 10);
         const query = `UPDATE users SET password = ? WHERE email = ?`;
         const formattedQuery = mysql.format(query, [hashedPassword, emailAttuale]);
@@ -314,8 +309,8 @@ app.put('/modifyUser',authenticateToken, async (req, res) => {
         });
     } else if (sesso) {
         const query = `UPDATE users SET sesso = ? WHERE email = ?`;
-        // const formattedQuery = mysql.format(query, [sesso, emailAttuale]);
-        // console.log(`Query formattata: ${formattedQuery}`);
+        const formattedQuery = mysql.format(query, [sesso, emailAttuale]);
+        console.log(`Query formattata: ${formattedQuery}`);
         db.query(query, [sesso, emailAttuale], (err, result) => {
             if (err) {
                 console.error('Errore di database:', err);
@@ -408,8 +403,6 @@ app.post('/addLesson',authenticateToken, (req, res) => {
 app.delete('/deleteLesson',authenticateToken,(req,res)=>{
     //TODO: 
 });
-
-
 
 // Gestione della connessione al database
 db.connect(err => {
